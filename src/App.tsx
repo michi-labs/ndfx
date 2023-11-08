@@ -1,23 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useEffect, useState } from "react";
+import { AuthClient } from "./icp/middleware/auth-middleware";
 
 function App() {
+  const [isAuth, setAuth] = useState(false);
+  let client: AuthClient;
+
+  useEffect(() => {
+    init();
+  });
+
+  async function init() {
+    client = await AuthClient.create();
+  }
+
+  function login() {
+    client.login({
+      onSuccess: () => setAuth(true),
+    });
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {isAuth ? (
+          <div>
+            <p>Se ha autenticado correctamente</p>
+            <p>Puede cerrar esta ventana</p>
+          </div>
+        ) : (
+          <div>
+            <p>Necesitas ingresar con tu identidad de Internet Identity</p>
+            <p>
+              <button onClick={() => login()}>Ingresar</button>
+            </p>
+          </div>
+        )}
       </header>
     </div>
   );
