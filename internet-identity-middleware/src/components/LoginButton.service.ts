@@ -40,21 +40,25 @@ export const login = async (
     identity: myKeyIdentity,
   });
 
-  authClient.login({
-    onSuccess: async () => {
-      const identity = authClient.getIdentity();
-      console.log({ identity });
+  try {
+    authClient.login({
+      onSuccess: async () => {
+        const identity = authClient.getIdentity();
+        console.log({ identity });
 
-      actions.onSuccess?.();
+        actions.onSuccess?.();
 
-      if (identity instanceof DelegationIdentity) {
-        const delegationIdentity = identity.getDelegation();
-        const message = JSON.stringify(delegationIdentity.toJSON());
+        if (identity instanceof DelegationIdentity) {
+          const delegationIdentity = identity.getDelegation();
+          const message = JSON.stringify(delegationIdentity.toJSON());
 
-        console.log({ message });
-        window.ReactNativeWebView?.postMessage(message);
-        // TODO: Log out after send event?
-      }
-    },
-  });
+          console.log({ message });
+          window.ReactNativeWebView?.postMessage(message);
+          // TODO: Log out after send event?
+        }
+      },
+    });
+  } catch (error) {
+    console.log({ error });
+  }
 };

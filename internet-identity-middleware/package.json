@@ -1,5 +1,5 @@
 {
-  "name": "ii-proxy",
+  "name": "internet-identity-middleware",
   "version": "0.1.0",
   "private": true,
   "scripts": {

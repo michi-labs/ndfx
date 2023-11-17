@@ -10,7 +10,11 @@ interface LoginButtonProps {
 const LoginButton = (props: LoginButtonProps) => {
   const { sessionKey, onSuccess, children } = props;
   return (
-    <button onClick={() => login(sessionKey, { onSuccess })}>{children}</button>
+    <>
+      <button onClick={() => login(sessionKey, { onSuccess })}>
+        {children}
+      </button>
+    </>
   );
 };
 
