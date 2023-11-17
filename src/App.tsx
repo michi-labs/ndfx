@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "./icp/middleware/middleware";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { toHexString } from "./icp/middleware/middleware.helpers";
@@ -12,7 +12,6 @@ function App() {
   const key = Ed25519KeyIdentity.generate();
   const publicKey = key.getPublicKey();
   const sessionKey = toHexString(publicKey.toDer());
-  console.log({ sessionKey });
 
   const onSuccessAuth = () => {
     setAuth(true);

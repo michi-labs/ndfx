@@ -48,9 +48,11 @@ export const login = async (
       actions.onSuccess?.();
 
       if (identity instanceof DelegationIdentity) {
-        const delegation = identity.getDelegation();
-        // TODO: Emit event to caller
-        console.log({ delegation });
+        const delegationIdentity = identity.getDelegation();
+        const message = JSON.stringify(delegationIdentity.toJSON());
+
+        console.log({ message });
+        window.ReactNativeWebView?.postMessage(message);
         // TODO: Log out after send event?
       }
     },
