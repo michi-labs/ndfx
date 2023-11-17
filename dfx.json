@@ -2,9 +2,9 @@
   "canisters": {
     "ionic-app": {
       "frontend": {
-        "entrypoint": "ionic-in-app-browser/www/index.html"
+        "entrypoint": "ionic-app/www/index.html"
       },
-      "source": ["ionic-in-app-browser/www/"],
+      "source": ["ionic-app/www/"],
       "type": "assets"
     },
     "internet-identity-middleware": {
