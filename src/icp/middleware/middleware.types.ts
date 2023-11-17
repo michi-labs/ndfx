@@ -71,13 +71,6 @@ export interface AuthClientLoginOptions {
   onError?: OnErrorCallback;
 }
 
-export interface InternetIdentityAuthRequest {
-  kind: "authorize-client";
-  sessionPublicKey: Uint8Array;
-  maxTimeToLive?: bigint;
-  derivationOrigin?: string;
-}
-
 export interface Delegation {
   pubkey: Uint8Array;
   expiration: bigint;
@@ -95,6 +88,13 @@ export interface AuthReadyMessage {
   kind: "authorize-ready";
 }
 
+export interface AuthClientMessage {
+  kind: "authorize-client";
+  sessionPublicKey: Uint8Array;
+  maxTimeToLive?: bigint;
+  derivationOrigin?: string;
+}
+
 export interface AuthResponseSuccess {
   kind: "authorize-client-success";
   delegations: Delegations;
@@ -106,5 +106,8 @@ export interface AuthResponseFailure {
   text: string;
 }
 
-export type IdentityServiceResponseMessage = AuthReadyMessage | AuthResponse;
 export type AuthResponse = AuthResponseSuccess | AuthResponseFailure;
+export type IdentityServiceResponseMessage =
+  | AuthReadyMessage
+  | AuthClientMessage
+  | AuthResponse;

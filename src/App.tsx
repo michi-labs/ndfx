@@ -1,25 +1,22 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
-import { AuthClient } from "./icp/middleware/auth-middleware";
+import { login } from "./icp/middleware/middleware";
+import { Ed25519KeyIdentity } from "@dfinity/identity";
+import { toHexString } from "./icp/middleware/middleware.helpers";
 
 function App() {
   const [isAuth, setAuth] = useState(false);
-  let client: AuthClient;
 
-  useEffect(() => {
-    init();
-  });
+  // Session Key must come from sessionKeyParam
+  const key = Ed25519KeyIdentity.generate();
+  const publicKey = key.getPublicKey();
+  const sessionKey = toHexString(publicKey.toDer());
+  console.log({ sessionKey });
 
-  async function init() {
-    client = await AuthClient.create();
-  }
-
-  function login() {
-    client.login({
-      onSuccess: () => setAuth(true),
-    });
-  }
+  const onSuccessAuth = () => {
+    setAuth(true);
+  };
 
   return (
     <div className="App">
@@ -34,7 +31,11 @@ function App() {
           <div>
             <p>Necesitas ingresar con tu identidad de Internet Identity</p>
             <p>
-              <button onClick={() => login()}>Ingresar</button>
+              <button
+                onClick={() => login(sessionKey, { onSuccess: onSuccessAuth })}
+              >
+                Ingresar
+              </button>
             </p>
           </div>
         )}
