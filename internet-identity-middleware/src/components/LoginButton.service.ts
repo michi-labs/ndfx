@@ -18,7 +18,7 @@ class IncompleteEd25519KeyIdentity extends SignIdentity {
     this._publicKey = publicKey;
   }
 
-  // We don't need implement this method
+  // We don't need to implement this method
   // @ts-ignore
   public sign(blob: ArrayBuffer): Promise<Signature> {}
 
@@ -48,6 +48,7 @@ export const login = async (
         actions.onSuccess?.();
 
         if (identity instanceof DelegationIdentity) {
+          console.log("DelegationEntity");
           const delegationIdentity = identity.getDelegation();
           notifySuccess(delegationIdentity, "window");
           // TODO: Log out after send event?
@@ -55,6 +56,7 @@ export const login = async (
       },
     });
   } catch (error) {
+    notifyError(error, "window");
     console.log({ error });
   }
 };
@@ -67,6 +69,21 @@ export function notifySuccess(
     kind: "authorize-client-success",
     delegations: delegation.delegations,
     userPublicKey: delegation.publicKey,
+  };
+
+  switch (strategy) {
+    case "window":
+      window.opener?.postMessage(message, "*");
+      break;
+    default:
+      console.log("Strategy not implemented");
+  }
+}
+
+export function notifyError(error: any, strategy: StrategyTypes) {
+  const message = {
+    kind: "authorize-client-error",
+    error,
   };
 
   switch (strategy) {

@@ -8,7 +8,12 @@ import { Browser } from '@capacitor/browser';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  public delegation: { [key: string]: any } = {};
+  public identityDelegation:
+    | {
+        delegations: { [key: string]: any };
+        userPublicKey: string;
+      }
+    | undefined;
 
   constructor(private alertController: AlertController) {}
 
@@ -20,8 +25,12 @@ export class HomePage {
     window.addEventListener('message', (event) => {
       console.log({ event });
 
-      if (event.data?.type === 'auth-success') {
-        this.delegation = event.data.delegation;
+      if (event.data?.kind === 'authorize-client-success') {
+        this.identityDelegation = {
+          delegations: event.data.delegations,
+          userPublicKey: event.data.userPublicKey,
+        };
+        console.log(this.identityDelegation);
         browser?.close();
         // TODO: Remove listener
       }
