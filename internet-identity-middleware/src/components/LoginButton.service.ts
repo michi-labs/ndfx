@@ -1,15 +1,14 @@
 import { AuthClient } from "@dfinity/auth-client";
 import { SignIdentity, Signature } from "@dfinity/agent";
-import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
+import {
+  DelegationChain,
+  DelegationIdentity,
+  Ed25519PublicKey,
+} from "@dfinity/identity";
 
+import { LoginActionHandlers, StrategyTypes } from "./LoginButton.types";
+import { IDENTITY_PROVIDER } from "./LoginButton.constants";
 import { fromHexString } from "./LoginButton.helpers";
-
-type OnSuccessHandler = () => void;
-type OnErrorHandler = () => void;
-type LoginActionHandlers = {
-  onSuccess?: OnSuccessHandler;
-  onError?: OnErrorHandler;
-};
 
 class IncompleteEd25519KeyIdentity extends SignIdentity {
   private _publicKey: Ed25519PublicKey;
@@ -42,18 +41,15 @@ export const login = async (
 
   try {
     authClient.login({
+      identityProvider: IDENTITY_PROVIDER,
       onSuccess: async () => {
         const identity = authClient.getIdentity();
-        console.log({ identity });
 
         actions.onSuccess?.();
 
         if (identity instanceof DelegationIdentity) {
           const delegationIdentity = identity.getDelegation();
-          const message = JSON.stringify(delegationIdentity.toJSON());
-
-          console.log({ message });
-          window.ReactNativeWebView?.postMessage(message);
+          notifySuccess(delegationIdentity, "window");
           // TODO: Log out after send event?
         }
       },
@@ -62,3 +58,22 @@ export const login = async (
     console.log({ error });
   }
 };
+
+export function notifySuccess(
+  delegation: DelegationChain,
+  strategy: StrategyTypes
+) {
+  const message = {
+    kind: "authorize-client-success",
+    delegations: delegation.delegations,
+    userPublicKey: delegation.publicKey,
+  };
+
+  switch (strategy) {
+    case "window":
+      window.opener?.postMessage(message, "*");
+      break;
+    default:
+      console.log("Strategy not implemented");
+  }
+}
