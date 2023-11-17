@@ -1,9 +1,9 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useState } from "react";
-import { login } from "./icp/middleware/middleware";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
-import { toHexString } from "./icp/middleware/middleware.helpers";
+import { toHexString } from "./components/LoginButton.helpers";
+import LoginButton from "./components/LoginButton.component";
 
 function App() {
   const [isAuth, setAuth] = useState(false);
@@ -30,11 +30,9 @@ function App() {
           <div>
             <p>Necesitas ingresar con tu identidad de Internet Identity</p>
             <p>
-              <button
-                onClick={() => login(sessionKey, { onSuccess: onSuccessAuth })}
-              >
-                Ingresar
-              </button>
+              <LoginButton sessionKey={sessionKey} onSuccess={onSuccessAuth}>
+                Ingresar con II
+              </LoginButton>
             </p>
           </div>
         )}

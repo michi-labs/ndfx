@@ -2,7 +2,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { SignIdentity, Signature } from "@dfinity/agent";
 import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
 
-import { fromHexString } from "./middleware.helpers";
+import { fromHexString } from "./LoginButton.helpers";
 
 type OnSuccessHandler = () => void;
 type OnErrorHandler = () => void;
