@@ -1,4 +1,5 @@
-import { login } from "./LoginButton.service";
+import { Auth } from "../services/auth/auth.service";
+import { WindowNotify } from "../services/auth/auth.strategies";
 
 interface LoginButtonProps {
   children: any;
@@ -9,9 +10,13 @@ interface LoginButtonProps {
 
 const LoginButton = (props: LoginButtonProps) => {
   const { sessionKey, onSuccess, children } = props;
+
+  const notify = new WindowNotify();
+  const authService = new Auth(sessionKey, notify);
+
   return (
     <>
-      <button onClick={() => login(sessionKey, { onSuccess })}>
+      <button onClick={() => authService.login({ onSuccess })}>
         {children}
       </button>
     </>

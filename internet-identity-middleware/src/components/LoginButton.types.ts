@@ -4,5 +4,3 @@ export type LoginActionHandlers = {
   onSuccess?: OnSuccessHandler;
   onError?: OnErrorHandler;
 };
-
-export type StrategyTypes = "window" | "applink" | "websocket";
