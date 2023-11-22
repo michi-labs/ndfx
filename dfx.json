@@ -1,12 +1,5 @@
 {
   "canisters": {
-    "ionic-angular": {
-      "frontend": {
-        "entrypoint": "ionic-angular/www/index.html"
-      },
-      "source": ["ionic-angular/www/"],
-      "type": "assets"
-    },
     "internet-identity-middleware": {
       "frontend": {
         "entrypoint": "internet-identity-middleware/build/index.html"
