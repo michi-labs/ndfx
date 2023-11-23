@@ -1,12 +1,13 @@
 import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
 import { AuthClient } from "@dfinity/auth-client";
-import { LoginActionHandlers } from "../../components/LoginButton.types";
+import { LoginActionHandlers } from "../../components/LoginButton/LoginButton.types";
 import { IncompleteEd25519KeyIdentity } from "../key-identity";
 import { NotifyStrategy } from "./auth.service.types";
 
-// export const IDENTITY_PROVIDER = https://identity.ic0.app
+const INTERNET_IDENTITY_PROVIDER_URL =
+  process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
 export const IDENTITY_PROVIDER =
-  "http://127.0.0.1:8000/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai";
+  INTERNET_IDENTITY_PROVIDER_URL || "https://identity.ic0.app";
 
 export class Auth {
   constructor(private sessionKey: string, private notify: NotifyStrategy) {}
