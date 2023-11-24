@@ -1,8 +1,7 @@
-import "./App.css";
 import Login from "./components/Login/Login.component";
+import "./App.css";
 
 function App() {
-  // TODO: Validate data and implement view for errors
   // TODO: Multilanguage
 
   return (

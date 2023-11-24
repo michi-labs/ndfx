@@ -1,16 +1,26 @@
-import { DelegationIdentity, Ed25519PublicKey } from "@dfinity/identity";
+import {
+  DelegationIdentity,
+  Ed25519KeyIdentity,
+  Ed25519PublicKey,
+} from "@dfinity/identity";
 import { AuthClient } from "@dfinity/auth-client";
+
 import { LoginActionHandlers } from "../../components/LoginButton/LoginButton.types";
 import { IncompleteEd25519KeyIdentity } from "../key-identity";
 import { NotifyStrategy } from "./auth.service.types";
 
+const INTERNET_IDENTITY_PROVIDER_DEFAULT_URL = "https://identity.ic0.app";
 const INTERNET_IDENTITY_PROVIDER_URL =
   process.env.REACT_APP_INTERNET_IDENTITY_PROVIDER_URL;
 export const IDENTITY_PROVIDER =
-  INTERNET_IDENTITY_PROVIDER_URL || "https://identity.ic0.app";
+  INTERNET_IDENTITY_PROVIDER_URL || INTERNET_IDENTITY_PROVIDER_DEFAULT_URL;
 
 export class Auth {
-  constructor(private sessionKey: string, private notify: NotifyStrategy) {}
+  private sessionKey: string;
+
+  constructor(private notify: NotifyStrategy) {
+    this.sessionKey = this.generateSessionKey();
+  }
 
   public static toHexString(buffer: ArrayBuffer): string {
     const uint8Array = new Uint8Array(buffer);
@@ -23,6 +33,13 @@ export class Auth {
     return new Uint8Array(
       (hexString.match(/.{1,2}/g) ?? []).map((byte) => parseInt(byte, 16))
     ).buffer;
+  }
+
+  public generateSessionKey(): string {
+    const key = Ed25519KeyIdentity.generate();
+    const publicKey = key.getPublicKey();
+    const sessionKey = Auth.toHexString(publicKey.toDer());
+    return sessionKey;
   }
 
   public login = async (actions: LoginActionHandlers) => {
@@ -44,7 +61,6 @@ export class Auth {
           actions.onSuccess?.();
 
           if (identity instanceof DelegationIdentity) {
-            console.log("DelegationEntity");
             const delegationIdentity = identity.getDelegation();
             this.notify.success(delegationIdentity);
             // TODO: Log out after send event?
@@ -52,8 +68,8 @@ export class Auth {
         },
       });
     } catch (error) {
+      actions.onError?.(error);
       this.notify.error(error);
-      console.log({ error });
     }
   };
 }

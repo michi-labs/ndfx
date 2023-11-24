@@ -26,7 +26,7 @@ export class WindowNotify implements NotifyStrategy {
   }
 }
 
-export class LinkNotify implements NotifyStrategy {
+export class ApplinkNotify implements NotifyStrategy {
   constructor(private appLink: string) {}
 
   public success(delegation: DelegationChain) {
@@ -38,7 +38,7 @@ export class LinkNotify implements NotifyStrategy {
 
     const stringMessage = JSON.stringify(message);
 
-    window.open(`${this.appLink}authorize-success?key=${stringMessage}`);
+    window.open(`${this.appLink}authorize-client-success?key=${stringMessage}`);
   }
 
   public error(error: any) {
@@ -49,6 +49,6 @@ export class LinkNotify implements NotifyStrategy {
 
     const stringMessage = JSON.stringify(message);
 
-    window.open(`${this.appLink}authorize-error?key=${stringMessage}`);
+    window.open(`${this.appLink}authorize-client-error?error=${stringMessage}`);
   }
 }

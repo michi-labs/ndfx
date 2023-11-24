@@ -1,21 +1,45 @@
 import { Auth } from "../../services/auth/auth.service";
-import { WindowNotify } from "../../services/auth/auth.strategies";
+import {
+  ApplinkNotify,
+  WindowNotify,
+} from "../../services/auth/auth.strategies";
 
 interface LoginButtonProps {
   children: any;
-  sessionKey: string;
+  strategy: string;
+  applink?: string;
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: any) => void;
 }
 
 const LoginButton = (props: LoginButtonProps) => {
-  const { sessionKey, onSuccess, children } = props;
+  const { children, strategy, applink, onSuccess, onError } = props;
 
-  const notify = new WindowNotify();
-  const authService = new Auth(sessionKey, notify);
+  let notify;
+
+  switch (strategy) {
+    case "window":
+      notify = new WindowNotify();
+      break;
+    case "applink":
+      if (applink) {
+        notify = new ApplinkNotify(applink);
+      } else {
+        throw new Error(
+          "Se requiere la propiedad 'applink' para la estrategia 'applink'"
+        );
+      }
+      break;
+    default:
+      throw new Error(`Estrategia de comunicación no reconocida: ${strategy}`);
+  }
+
+  const authService = new Auth(notify);
 
   return (
-    <button onClick={() => authService.login({ onSuccess })}>{children}</button>
+    <button onClick={() => authService.login({ onSuccess, onError })}>
+      {children}
+    </button>
   );
 };
 
