@@ -1,7 +1,7 @@
 import AuthButton from "./AuthButton.component";
 import { useAuth } from "../hooks/useAuth";
 
-function Login() {
+function LoginPage() {
   const { isAuth } = useAuth();
 
   // TODO: Implement errors view
@@ -25,4 +25,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
