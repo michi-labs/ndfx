@@ -1,9 +1,7 @@
-import Login from "./components/Login/Login.component";
+import Login from "./components/Login.component";
 import "./App.css";
 
 function App() {
-  // TODO: Multilanguage
-
   return (
     <div className="App">
       <Login />

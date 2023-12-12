@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
+    "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
     "@dfinity/agent": "^0.20.0",
     "@dfinity/auth-client": "^0.20.0",
+    "@dfinity/candid": "^0.20.2",
     "@dfinity/identity": "^0.20.0",
     "@dfinity/principal": "^0.20.0",
     "@testing-library/jest-dom": "^5.17.0",
